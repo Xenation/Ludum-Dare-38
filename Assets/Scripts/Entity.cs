@@ -9,6 +9,7 @@ namespace Assets.Scripts {
 		public event DestroyEventHandler OnDestroy;
 
 		public float groundDetectLength = .01f;
+		public bool isUpright = true;
 		public bool inAir { get; private set; }
 		public Rigidbody2D body { get; private set; }
 		public Vector2 localUp { get; private set; }
@@ -16,6 +17,12 @@ namespace Assets.Scripts {
 		protected Vector3 right { get { return Vector3.Cross(localUp3, Vector3.forward).normalized; } }
 		protected Vector2 right2 { get { return right; } }
 		protected Vector2 movement = new Vector2();
+
+		public bool UseGravity { get; protected set; }
+
+		public Entity() {
+			UseGravity = true;
+		}
 
 		public void Awake() {
 			body = GetComponent<Rigidbody2D>();
@@ -29,13 +36,15 @@ namespace Assets.Scripts {
 
 		// Update is called once per frame
 		public virtual void Update() {
+			
 		}
 		
 		public virtual void FixedUpdate() {
 			if (GravityManager.Instance.center == null) return;
 			UpdateUp();
-			//transform.LookAt(((Vector3) body.position) + Vector3.forward, localUp);
-			GravityManager.Instance.FixedUpright(body);
+			if (isUpright) {
+				GravityManager.Instance.FixedUpright(body);
+			}
 			CheckOnGround();
 		}
 

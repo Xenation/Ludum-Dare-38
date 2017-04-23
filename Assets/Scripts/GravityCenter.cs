@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts {
+	[ExecuteInEditMode]
 	public class GravityCenter : MonoBehaviour {
 
 		public Vector2 position {
@@ -37,7 +38,7 @@ namespace Assets.Scripts {
 		private void InitAffectedBodies() {
 			for (int i = 0; i < bodiesParent.childCount; i++) {
 				Entity entity = bodiesParent.GetChild(i).gameObject.GetComponent<Entity>();
-				if (entity != null) {
+				if (entity != null && entity.UseGravity) {
 					affectedBodies.Add(entity);
 					entity.OnDestroy += RemoveAffectedBody;
 				}

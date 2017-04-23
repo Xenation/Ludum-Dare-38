@@ -40,6 +40,7 @@ namespace Assets.Scripts {
 		public void RegisterEntity(GameObject go) {
 			Entity ent = go.GetComponent<Entity>();
 			if (ent == null) return;
+			if (!ent.UseGravity) return;
 			center.AddAffectedBody(ent);
 			ent.OnDestroy += center.RemoveAffectedBody;
 		}

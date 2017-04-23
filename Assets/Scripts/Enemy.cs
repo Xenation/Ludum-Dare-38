@@ -1,7 +1,7 @@
 using UnityEngine;
 
 namespace Assets.Scripts {
-	public class Enemy : Actor {
+	public class Enemy : Character {
 
 		public float viewDistance = 30;
 		public float minDistance = 5;
@@ -15,12 +15,17 @@ namespace Assets.Scripts {
 
 		public override void Update() {
 			base.Update();
+			targetDir = ToPlayer();
 			if (ActorManager.Instance.player.isAlive && SeesPlayer()) {
-				if (ToPlayer().magnitude > minDistance) {
+				if (targetDir.magnitude > minDistance) {
 					if (IsPlayerAtRight()) {
 						horizontalVel = speed;
+						sprite.flipX = false;
+						arm.GetComponent<SpriteRenderer>().flipX = false;
 					} else {
 						horizontalVel = -speed;
+						sprite.flipX = true;
+						arm.GetComponent<SpriteRenderer>().flipX = true;
 					}
 				}
 				if (CheckObstacle()) {
@@ -29,16 +34,16 @@ namespace Assets.Scripts {
 						lastJumpTime = Time.time;
 					}
 				}
-				Shoot(ToPlayer().normalized);
+				Shoot(targetDir.normalized);
 			}
 		}
 
 		private bool IsPlayerAtRight() {
-			return Vector2.Dot(right, ToPlayer()) > 0;
+			return Vector2.Dot(right, targetDir) > 0;
 		}
 
 		private bool SeesPlayer() {
-			RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, ToPlayer(), viewDistance);
+			RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, targetDir, viewDistance);
 			for (int i = 0; i < hits.Length; i++) {
 				if (hits[i].transform == transform) continue;
 				else if (hits[i].transform == ActorManager.Instance.player.transform) {
@@ -51,6 +56,7 @@ namespace Assets.Scripts {
 		}
 
 		private Vector2 ToPlayer() {
+			if (ActorManager.Instance.player == null) return new Vector2(0, 0);
 			return ActorManager.Instance.player.transform.position - transform.position;
 		}
 
