@@ -5,6 +5,9 @@ namespace Assets.Scripts {
 
 		public float viewDistance = 30;
 		public float minDistance = 5;
+		public float jumpDelay = .75f;
+
+		private float lastJumpTime;
 
 		public override void Start() {
 			base.Start();
@@ -18,6 +21,12 @@ namespace Assets.Scripts {
 						horizontalVel = speed;
 					} else {
 						horizontalVel = -speed;
+					}
+				}
+				if (CheckObstacle()) {
+					if (Time.time - lastJumpTime > jumpDelay) {
+						Jump();
+						lastJumpTime = Time.time;
 					}
 				}
 				Shoot(ToPlayer().normalized);
@@ -43,6 +52,23 @@ namespace Assets.Scripts {
 
 		private Vector2 ToPlayer() {
 			return ActorManager.Instance.player.transform.position - transform.position;
+		}
+
+		private bool CheckObstacle() {
+			if (horizontalVel < 0) {
+				Debug.DrawRay(body.position - localUp * .5f - right2 * .7f, -right2, Color.red);
+				RaycastHit2D hit = Physics2D.Raycast(body.position - localUp * .5f - right2, -right2, .025f);
+				if (hit) {
+					return true;
+				}
+			} else {
+				Debug.DrawRay(body.position - localUp * .5f + right2 * .7f, right2, Color.red);
+				RaycastHit2D hit = Physics2D.Raycast(body.position - localUp * .5f + right2, right2, .025f);
+				if (hit) {
+					return true;
+				}
+			}
+			return false;
 		}
 
 	}

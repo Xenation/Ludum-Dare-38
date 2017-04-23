@@ -54,6 +54,10 @@ namespace Assets.Scripts {
 			GravityManager.Instance.RegisterEntity(bul);
 		}
 
+		public void Jump() {
+			body.AddForce(localUp * jumpPower, ForceMode2D.Impulse);
+		}
+
 		public void ApplyDamage(int damage) {
 			health -= damage;
 		}

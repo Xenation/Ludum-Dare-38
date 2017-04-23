@@ -14,6 +14,7 @@ namespace Assets.Scripts {
 		public Vector2 localUp { get; private set; }
 		public Vector3 localUp3 { get { return localUp; } }
 		protected Vector3 right { get { return Vector3.Cross(localUp3, Vector3.forward).normalized; } }
+		protected Vector2 right2 { get { return right; } }
 		protected Vector2 movement = new Vector2();
 
 		public void Awake() {

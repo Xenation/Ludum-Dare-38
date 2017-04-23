@@ -20,7 +20,7 @@ namespace Assets.Scripts {
 				horizontalVel = -speed;
 			}
 			if (Input.GetButtonDown("jump") && !inAir) {
-				body.AddForce(localUp * jumpPower, ForceMode2D.Impulse);
+				Jump();
 			}
 			if (Input.GetButtonDown("shoot")) {
 				Shoot(((Vector2) GetMouseVec()).normalized);
