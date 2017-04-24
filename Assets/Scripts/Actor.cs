@@ -74,7 +74,7 @@ namespace Assets.Scripts {
 			body.AddForce(localUp * jumpPower, ForceMode2D.Impulse);
 		}
 
-		public void ApplyDamage(int damage) {
+		public virtual void ApplyDamage(int damage) {
 			health -= damage;
 		}
 
